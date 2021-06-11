@@ -1,23 +1,26 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
 import sys
 import argparse
-import Image
+try :
+    import Image
+except:
+    from PIL import Image # Deprecated
 
 parser = argparse.ArgumentParser( description='Scan File and View Entropy')
-parser.add_argument('inFile', default=None, type=argparse.FileType('r'), help='File to Scan')
+parser.add_argument('inFile', default=None, type=argparse.FileType('r',encoding="latin-1"), help='File to Scan')
 parser.add_argument('--outFile', default=None, type=str, help='File to Save the img')
 args = parser.parse_args()
 
 def raw2Int(raw):
-    return int(raw.encode("hex"),16)
+    return ord(raw)
 
 print("Processing Starts Here (This May Take A While)")
 
 content = args.inFile.read()
 args.inFile.close()
 
-size=(256,(len(content)/256)+1)
+size=(256,int((len(content)/256)+1))
 im = Image.new('RGB',size)
 pix=im.load()
 
